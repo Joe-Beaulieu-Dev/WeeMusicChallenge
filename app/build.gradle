@@ -24,25 +24,35 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // Android
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.2.1'
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // Testing
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+
+    // Dagger
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
-    implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
-    implementation "com.squareup.okhttp3:okhttp:$ok_http_version"
+    // OkHttp
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation "com.squareup.okhttp3:okhttp:$ok_http_version"
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    // Retrofit
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
-    implementation "com.jakewharton.threetenabp:threetenabp:$three_ten_abp_version"
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
+    // ThreeTenABP
+    implementation "com.jakewharton.threetenabp:threetenabp:$three_ten_abp_version"
 }
