@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.MainActivity">
+
+    <!-- Album -->
+    <item
+        android:id="@+id/action_album"
+        android:title="@string/menu_album"
+        app:showAsAction="never" />
+
+    <!-- Artist -->
+    <item
+        android:id="@+id/action_artist"
+        android:title="@string/menu_artist"
+        app:showAsAction="never" />
+
+    <!-- Price -->
+    <item
+        android:id="@+id/action_price"
+        android:title="@string/menu_price"
+        app:showAsAction="never" />
+
+</menu>
