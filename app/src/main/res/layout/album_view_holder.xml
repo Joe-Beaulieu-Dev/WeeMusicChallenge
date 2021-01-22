@@ -17,14 +17,13 @@
             android:id="@+id/ivCover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:contentDescription="@string/content_description_album_art"
             app:layout_constraintBottom_toTopOf="@+id/clData"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:background="@android:color/holo_blue_bright"
-            tools:layout_height="124dp"
-            tools:layout_width="124dp" />
+            tools:layout_height="124dp" />
 
         <!-- New album marker -->
         <TextView
@@ -52,7 +51,7 @@
             android:id="@+id/clData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -11,4 +11,7 @@
     <string name="menu_artist">Artist</string>
     <string name="menu_price">Price</string>
 
+    <!-- Accessibility -->
+    <string name="content_description_album_art">Album art</string>
+
 </resources>
