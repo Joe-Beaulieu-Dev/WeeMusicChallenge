@@ -1,10 +1,7 @@
 package com.weemusic.android.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +14,9 @@ import com.weemusic.android.R
 import com.weemusic.android.core.DaggerAppComponent
 import com.weemusic.android.core.DaggerDomainComponent
 import com.weemusic.android.core.DaggerNetworkComponent
+import com.weemusic.android.domain.Album
 import com.weemusic.android.domain.GetTopAlbumsUseCase
+import com.weemusic.android.util.AlbumJsonToAlbumConverter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
@@ -27,18 +26,71 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     @Inject
-    lateinit var getTopAlbumsUseCase: GetTopAlbumsUseCase
-    private lateinit var adapter: AlbumsAdapter
-    private lateinit var topAlbumsDisposable: Disposable
+    lateinit var mGetTopAlbumsUseCase: GetTopAlbumsUseCase
+    private lateinit var mAlbums: List<Album>
+    private lateinit var mAdapter: AlbumsAdapter
+    private lateinit var mTopAlbumsDisposable: Disposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setUpActionBar()
+        initDaggerComponents()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mTopAlbumsDisposable = mGetTopAlbumsUseCase
+            .perform()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { response ->
+                response.getAsJsonObject("feed")
+                    .getAsJsonArray("entry")
+                    .map { it.asJsonObject }
+            }
+            .subscribe(Consumer {
+                mAlbums = jsonListToAlbumList(it)
+                mAdapter = AlbumsAdapter(sortByAlbumNameAsc(jsonListToAlbumList(it)))
+                rvFeed.adapter = mAdapter
+                rvFeed.layoutManager = GridLayoutManager(this, 2)
+            })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_sort, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_album -> {
+                mAdapter.albums = sortByAlbumNameAsc(mAlbums)
+                mAdapter.notifyDataSetChanged()
+                return true
+            }
+            R.id.action_artist -> {
+                mAdapter.albums = sortByArtistAsc(mAlbums)
+                mAdapter.notifyDataSetChanged()
+                return true
+            }
+            R.id.action_price -> {
+                mAdapter.albums = sortByPriceAsc(mAlbums)
+                mAdapter.notifyDataSetChanged()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setUpActionBar() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
 
+    private fun initDaggerComponents() {
         val networkComponent = DaggerNetworkComponent.create()
         val domainComponent = DaggerDomainComponent
             .builder()
@@ -52,30 +104,31 @@ class MainActivity : AppCompatActivity() {
             .inject(this)
     }
 
-    override fun onStart() {
-        super.onStart()
-        topAlbumsDisposable = getTopAlbumsUseCase
-            .perform()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { response ->
-                response.getAsJsonObject("feed")
-                    .getAsJsonArray("entry")
-                    .map { it.asJsonObject }
-            }
-            .subscribe(Consumer {
-                adapter = AlbumsAdapter(it)
-                rvFeed.adapter = adapter
-                rvFeed.layoutManager = GridLayoutManager(this, 2)
-            })
+    private fun jsonListToAlbumList(jsonAlbumList: List<JsonObject>): List<Album> {
+        val albumList = ArrayList<Album>()
+        jsonAlbumList.forEach {
+            albumList.add(jsonToAlbum(it))
+        }
+        return albumList
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_sort, menu)
-        return true
+    private fun jsonToAlbum(albumJson: JsonObject): Album {
+        return AlbumJsonToAlbumConverter.jsonToAlbum(albumJson)
     }
 
-    class AlbumsAdapter(val albums: List<JsonObject>) : RecyclerView.Adapter<AlbumsViewHolder>() {
+    private fun sortByAlbumNameAsc(list: List<Album>): List<Album> {
+        return list.sortedBy { it.name }
+    }
+
+    private fun sortByArtistAsc(list: List<Album>): List<Album> {
+        return list.sortedBy { it.artist }
+    }
+
+    private fun sortByPriceAsc(list: List<Album>): List<Album> {
+        return list.sortedBy { it.price.substring(1).toDoubleOrNull() }
+    }
+
+    class AlbumsAdapter(var albums: List<Album>) : RecyclerView.Adapter<AlbumsViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumsViewHolder {
             val itemView = LayoutInflater
@@ -93,25 +146,11 @@ class MainActivity : AppCompatActivity() {
 
     class AlbumsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun onBind(album: JsonObject) {
-            val coverUrl = album
-                .getAsJsonArray("im:image")
-                .last()
-                .asJsonObject
-                .getAsJsonPrimitive("label")
-                .asString
-            val title = album
-                .getAsJsonObject("im:name")
-                .getAsJsonPrimitive("label")
-                .asString
-            val artist = album
-                .getAsJsonObject("im:artist")
-                .getAsJsonPrimitive("label")
-                .asString
-            val price = album
-                .getAsJsonObject("im:price")
-                .getAsJsonPrimitive("label")
-                .asString
+        fun onBind(album: Album) {
+            val coverUrl = album.images.last()
+            val title = album.title
+            val artist = album.artist
+            val price = album.price
 
             val ivCover: ImageView = itemView.findViewById(R.id.ivCover)
             val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)

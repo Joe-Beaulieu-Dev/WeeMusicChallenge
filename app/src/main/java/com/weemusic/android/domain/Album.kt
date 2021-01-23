@@ -10,5 +10,6 @@ data class Album(
     val title: String,
     val artist: String,
     val category: String,
-    val releaseDate: LocalDate
+//    val releaseDate: LocalDate,
+    val price: String
 )
