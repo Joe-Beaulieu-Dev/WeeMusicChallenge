@@ -1,7 +1,9 @@
 package com.weemusic.android.util
 
 import com.google.gson.JsonObject
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 private const val KEY_ID_OUTER = "id"
 private const val KEY_ID_ATTRIBUTES = "attributes"
@@ -71,10 +73,16 @@ class AlbumJsonParser(private val album: JsonObject) {
             .getAsJsonPrimitive(KEY_CATEGORY_LABEL)
             .asString
 
-//    fun getReleaseDate(): LocalDate =
-//        album.getAsJsonObject(KEY_RELEASE_DATE)
-//            .getAsJsonPrimitive(KEY_RELEASE_DATE_LABEL)
-//            .asString
+    fun getReleaseDate(): LocalDate {
+        val dateTimeStr = album.getAsJsonObject(KEY_RELEASE_DATE)
+            .getAsJsonPrimitive(KEY_RELEASE_DATE_LABEL)
+            .asString
+
+        return ZonedDateTime.parse(dateTimeStr)
+            .withZoneSameInstant(ZoneId.systemDefault())
+            .toLocalDate()
+    }
+
 
     fun getPrice(): String =
         album.getAsJsonObject(KEY_PRICE)

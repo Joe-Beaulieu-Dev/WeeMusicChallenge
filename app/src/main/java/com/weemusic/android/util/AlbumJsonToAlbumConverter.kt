@@ -14,7 +14,7 @@ object AlbumJsonToAlbumConverter {
             parser.getTitle(),
             parser.getArtist(),
             parser.getCategory(),
-//            parser.getReleaseDate(),
+            parser.getReleaseDate(),
             parser.getPrice()
         )
     }

@@ -1,6 +1,6 @@
 package com.weemusic.android.domain
 
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 
 data class Album(
     val id: Int,
@@ -10,6 +10,6 @@ data class Album(
     val title: String,
     val artist: String,
     val category: String,
-//    val releaseDate: LocalDate,
+    val releaseDate: LocalDate,
     val price: String
 )

@@ -22,6 +22,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.album_view_holder.view.*
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit.DAYS
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -148,12 +151,12 @@ class MainActivity : AppCompatActivity() {
 
         fun onBind(album: Album) {
             val coverUrl = album.images.last()
-            val title = album.title
+            val name = album.name
             val artist = album.artist
             val price = album.price
 
             val ivCover: ImageView = itemView.findViewById(R.id.ivCover)
-            val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
+            val tvName: TextView = itemView.findViewById(R.id.tvName)
             val tvArtist: TextView = itemView.findViewById(R.id.tvArtist)
             val tvPrice: TextView = itemView.findViewById(R.id.tvPrice)
 
@@ -167,9 +170,23 @@ class MainActivity : AppCompatActivity() {
                     .resize(ivCover.width, ivCover.width)
                     .into(ivCover)
             }
-            tvTitle.text = title
+            tvName.text = name
             tvArtist.text = artist
             tvPrice.text = price
+            setNewIconVisibility(album)
+        }
+
+        private fun setNewIconVisibility(album: Album) {
+            if (isAlbumNew(album)) {
+                itemView.tvNewAlbum.visibility = View.VISIBLE
+            } else {
+                itemView.tvNewAlbum.visibility = View.INVISIBLE
+            }
+        }
+
+        private fun isAlbumNew(album: Album): Boolean {
+            val daysOld = DAYS.between(album.releaseDate, LocalDate.now())
+            return daysOld <= 30
         }
     }
 }
