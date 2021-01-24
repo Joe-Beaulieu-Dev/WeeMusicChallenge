@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.weemusic.android.R
 import com.weemusic.android.domain.Album
+import com.weemusic.android.util.AlbumSorter
 import kotlinx.android.synthetic.main.album_view_holder.view.*
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -29,17 +30,17 @@ class AlbumsAdapter(var albums: List<Album>) : RecyclerView.Adapter<AlbumsViewHo
         holder.onBind(albums[position])
 
     fun sortByAlbumNameAsc() {
-        albums = albums.sortedBy { it.name }
+        albums = AlbumSorter.sortByAlbumNameAsc(albums)
         notifyDataSetChanged()
     }
 
     fun sortByArtistAsc() {
-        albums = albums.sortedBy { it.artist }
+        albums = AlbumSorter.sortByArtistAsc(albums)
         notifyDataSetChanged()
     }
 
     fun sortByPriceAsc() {
-        albums = albums.sortedBy { it.price.substring(1).toDoubleOrNull() }
+        albums = AlbumSorter.sortByPriceAsc(albums)
         notifyDataSetChanged()
     }
 }
