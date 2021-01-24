@@ -12,9 +12,15 @@ import com.weemusic.android.R
 import com.weemusic.android.domain.Album
 import kotlinx.android.synthetic.main.activity_main.*
 
+private const val KEY_SORTING_METHOD = "sortingMethod"
+private const val KEY_SORT_BY_ALBUM = 0
+private const val KEY_SORT_BY_ARTIST = 1
+private const val KEY_SORT_BY_PRICE = 2
+
 class TopAlbumsActivity : AppCompatActivity() {
     private lateinit var mViewModel: TopAlbumsViewModel
     private lateinit var mAdapter: AlbumsAdapter
+    private var mSortingMethod = KEY_SORT_BY_ALBUM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +53,19 @@ class TopAlbumsActivity : AppCompatActivity() {
 
     private fun setUpRecyclerView(albums: List<Album>) {
         mAdapter = AlbumsAdapter(albums)
-        mAdapter.sortByAlbumNameAsc()
+        sortAlbums(mSortingMethod)
         rvFeed.adapter = mAdapter
         rvFeed.layoutManager = GridLayoutManager(this, 2)
+    }
+
+    private fun sortAlbums(sortingMethod: Int) {
+        mSortingMethod = sortingMethod
+        when (mSortingMethod) {
+            KEY_SORT_BY_ALBUM -> mAdapter.sortByAlbumNameAsc()
+            KEY_SORT_BY_ARTIST -> mAdapter.sortByArtistAsc()
+            KEY_SORT_BY_PRICE -> mAdapter.sortByPriceAsc()
+            else -> mAdapter.sortByAlbumNameAsc()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -60,17 +76,27 @@ class TopAlbumsActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.action_album -> {
-                mAdapter.sortByAlbumNameAsc()
+                sortAlbums(KEY_SORT_BY_ALBUM)
                 true
             }
             R.id.action_artist -> {
-                mAdapter.sortByArtistAsc()
+                sortAlbums(KEY_SORT_BY_ARTIST)
                 true
             }
             R.id.action_price -> {
-                mAdapter.sortByPriceAsc()
+                sortAlbums(KEY_SORT_BY_PRICE)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_SORTING_METHOD, mSortingMethod)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        mSortingMethod = savedInstanceState.getInt(KEY_SORTING_METHOD, KEY_SORT_BY_ALBUM)
+    }
 }

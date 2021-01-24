@@ -1,6 +1,5 @@
 package com.weemusic.android.model
 
-import com.google.gson.JsonObject
 import com.weemusic.android.domain.Album
 import com.weemusic.android.domain.GetTopAlbumsUseCase
 import com.weemusic.android.util.AlbumJsonToAlbumConverter
@@ -20,9 +19,6 @@ object AlbumRepository {
             .map { response ->
                 response.getAsJsonObject(KEY_FULL_RESPONSE)
                     .getAsJsonArray(KEY_ALBUMS)
-                    .map { jsonToAlbum(it.asJsonObject) }
+                    .map { AlbumJsonToAlbumConverter.jsonToAlbum(it.asJsonObject) }
             }
-
-    private fun jsonToAlbum(albumJson: JsonObject): Album =
-        AlbumJsonToAlbumConverter.jsonToAlbum(albumJson)
 }
