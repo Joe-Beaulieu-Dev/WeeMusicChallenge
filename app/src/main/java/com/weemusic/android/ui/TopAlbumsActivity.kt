@@ -16,11 +16,10 @@ import com.weemusic.android.core.DaggerDomainComponent
 import com.weemusic.android.core.DaggerNetworkComponent
 import com.weemusic.android.domain.Album
 import com.weemusic.android.domain.GetTopAlbumsUseCase
+import com.weemusic.android.model.AlbumRepository
 import com.weemusic.android.util.AlbumJsonToAlbumConverter
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.album_view_holder.view.*
 import java.time.LocalDate
@@ -44,21 +43,13 @@ class TopAlbumsActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        mTopAlbumsDisposable = mGetTopAlbumsUseCase
-            .perform()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { response ->
-                response.getAsJsonObject("feed")
-                    .getAsJsonArray("entry")
-                    .map { it.asJsonObject }
-            }
-            .subscribe(Consumer {
-                mAlbums = jsonListToAlbumList(it)
-                mAdapter = AlbumsAdapter(sortByAlbumNameAsc(jsonListToAlbumList(it)))
-                rvFeed.adapter = mAdapter
-                rvFeed.layoutManager = GridLayoutManager(this, 2)
-            })
+        val topAlbums = AlbumRepository.getTopAlbums(mGetTopAlbumsUseCase)
+        mTopAlbumsDisposable = topAlbums.subscribe(Consumer {
+            mAlbums = jsonListToAlbumList(it)
+            mAdapter = AlbumsAdapter(sortByAlbumNameAsc(jsonListToAlbumList(it)))
+            rvFeed.adapter = mAdapter
+            rvFeed.layoutManager = GridLayoutManager(this, 2)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
