@@ -27,7 +27,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit.DAYS
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class TopAlbumsActivity : AppCompatActivity() {
     @Inject
     lateinit var mGetTopAlbumsUseCase: GetTopAlbumsUseCase
     private lateinit var mAlbums: List<Album>
