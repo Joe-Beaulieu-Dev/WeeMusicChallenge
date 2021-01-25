@@ -1,4 +1,4 @@
-package com.weemusic.android.ui
+package com.weemusic.android.ui.topalbums
 
 import android.view.LayoutInflater
 import android.view.View

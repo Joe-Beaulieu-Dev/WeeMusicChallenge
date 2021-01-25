@@ -1,4 +1,4 @@
-package com.weemusic.android.ui
+package com.weemusic.android.ui.topalbums
 
 import android.app.Application
 import androidx.lifecycle.*

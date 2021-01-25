@@ -1,4 +1,4 @@
-package com.weemusic.android.ui
+package com.weemusic.android.ui.topalbums
 
 import android.content.res.Configuration
 import android.os.Bundle

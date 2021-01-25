@@ -1,6 +1,6 @@
 package com.weemusic.android.core
 
-import com.weemusic.android.ui.TopAlbumsViewModel
+import com.weemusic.android.ui.topalbums.TopAlbumsViewModel
 import dagger.Component
 
 @AppScope
