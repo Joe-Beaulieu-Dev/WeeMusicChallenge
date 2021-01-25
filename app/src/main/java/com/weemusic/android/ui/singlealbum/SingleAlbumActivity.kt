@@ -1,5 +1,6 @@
 package com.weemusic.android.ui.singlealbum
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -41,11 +42,19 @@ class SingleAlbumActivity : AppCompatActivity() {
 
     private fun observeCover() {
         mViewModel.getCover().observe(this, {
+            // load cover art into View with calculated constraint
             mBinding.singleIvAlbumArt.post {
+                // get the constraint necessary to make the cover art View a square
+                val constraint = when (resources.configuration.orientation) {
+                    Configuration.ORIENTATION_PORTRAIT -> mBinding.singleIvAlbumArt.width
+                    Configuration.ORIENTATION_LANDSCAPE -> mBinding.singleIvAlbumArt.height
+                    else -> mBinding.singleIvAlbumArt.width
+                }
+                // load cover art
                 Picasso
                     .with(this)
                     .load(it)
-                    .resize(mBinding.singleIvAlbumArt.width, mBinding.singleIvAlbumArt.width)
+                    .resize(constraint, constraint)
                     .into(mBinding.singleIvAlbumArt)
             }
         })
