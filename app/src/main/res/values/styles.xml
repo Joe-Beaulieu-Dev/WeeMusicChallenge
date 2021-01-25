@@ -22,6 +22,11 @@
         <item name="android:actionOverflowButtonStyle">@style/AlbumSortMenu</item>
     </style>
 
+    <!-- SingleAlbumActivity -->
+    <style name="SingleAlbumActivity" parent="NoActionBar">
+        <item name="android:textColor">@color/toolbar_text_color</item>
+    </style>
+
     <!-- Album Sort Overflow menu icon -->
     <style name="AlbumSortMenu" parent="Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_baseline_sort_36</item>

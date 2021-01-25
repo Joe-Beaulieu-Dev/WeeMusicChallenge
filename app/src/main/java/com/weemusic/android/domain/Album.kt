@@ -1,5 +1,6 @@
 package com.weemusic.android.domain
 
+import java.io.Serializable
 import java.time.LocalDate
 
 data class Album(
@@ -12,4 +13,4 @@ data class Album(
     val category: String,
     val releaseDate: LocalDate,
     val price: String
-)
+) : Serializable

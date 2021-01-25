@@ -2,8 +2,9 @@
     <!-- App name -->
     <string name="app_name">WeeMusic</string>
 
-    <!-- Activity names -->
-    <string name="title_main">Top Albums</string>
+    <!-- Activity titles -->
+    <string name="title_top_albums">Top Albums</string>
+    <string name="title_album">Album</string>
 
     <!-- Main -->
     <string name="text_new">New</string>
@@ -13,5 +14,4 @@
 
     <!-- Accessibility -->
     <string name="content_description_album_art">Album art</string>
-
 </resources>

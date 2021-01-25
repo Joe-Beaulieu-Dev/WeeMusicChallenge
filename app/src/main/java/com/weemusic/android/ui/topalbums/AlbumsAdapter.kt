@@ -14,14 +14,15 @@ import kotlinx.android.synthetic.main.album_view_holder.view.*
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-class AlbumsAdapter(var albums: List<Album>) : RecyclerView.Adapter<AlbumsViewHolder>() {
+class AlbumsAdapter(var albums: List<Album>, var listener: AlbumListener) :
+    RecyclerView.Adapter<AlbumsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumsViewHolder {
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.album_view_holder, parent, false)
 
-        return AlbumsViewHolder(itemView)
+        return AlbumsViewHolder(itemView, albums, listener)
     }
 
     override fun getItemCount(): Int = albums.size
@@ -45,7 +46,15 @@ class AlbumsAdapter(var albums: List<Album>) : RecyclerView.Adapter<AlbumsViewHo
     }
 }
 
-class AlbumsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+interface AlbumListener {
+    fun onClick(album: Album)
+}
+
+class AlbumsViewHolder(
+    itemView: View,
+    private val albums: List<Album>,
+    private val listener: AlbumListener
+) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
     fun onBind(album: Album) {
         val coverUrl = album.images.last()
@@ -72,6 +81,8 @@ class AlbumsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         tvArtist.text = artist
         tvPrice.text = price
         setNewIconVisibility(album)
+
+        itemView.setOnClickListener(this)
     }
 
     private fun setNewIconVisibility(album: Album) {
@@ -85,5 +96,9 @@ class AlbumsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun isAlbumNew(album: Album): Boolean {
         val daysOld = ChronoUnit.DAYS.between(album.releaseDate, LocalDate.now())
         return daysOld <= 30
+    }
+
+    override fun onClick(v: View?) {
+        listener.onClick(albums[adapterPosition])
     }
 }
