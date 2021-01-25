@@ -18,17 +18,20 @@ class SingleAlbumActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // get album
         mAlbum = if (savedInstanceState == null) {
             intent.getSerializableExtra(KEY_SELECTED_ALBUM) as Album
         } else {
             savedInstanceState.getSerializable(KEY_SELECTED_ALBUM) as Album
         }
 
+        // set up ViewModel
         mViewModel = ViewModelProvider(
             this,
             SingleAlbumViewModelFactory(mAlbum)
         ).get(SingleAlbumViewModel::class.java)
 
+        // set up DataBinding
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_single_album)
         mBinding.lifecycleOwner = this
         mBinding.viewModel = mViewModel

@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.album_view_holder.view.*
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-class AlbumsAdapter(var albums: List<Album>, var listener: AlbumListener) :
+class AlbumsAdapter(private var albums: List<Album>, private var listener: AlbumListener) :
     RecyclerView.Adapter<AlbumsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumsViewHolder {

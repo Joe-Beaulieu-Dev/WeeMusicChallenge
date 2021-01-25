@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weemusic.android.domain.Album
 
-class SingleAlbumViewModel(val album: Album) : ViewModel() {
+class SingleAlbumViewModel(album: Album) : ViewModel() {
     private val mCover = MutableLiveData(album.images[album.images.size - 1])
     val mAlbumName = MutableLiveData(album.name)
     val mArtist = MutableLiveData(album.artist)
