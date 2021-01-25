@@ -3,6 +3,7 @@ package com.weemusic.android.ui.singlealbum
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
@@ -38,6 +39,14 @@ class SingleAlbumActivity : AppCompatActivity() {
         mBinding.viewModel = mViewModel
 
         observeCover()
+        setUpActionBar()
+    }
+
+    private fun setUpActionBar() {
+        val toolbar: Toolbar = findViewById(R.id.single_toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     private fun observeCover() {

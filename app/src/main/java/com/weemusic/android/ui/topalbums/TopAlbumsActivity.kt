@@ -36,7 +36,7 @@ class TopAlbumsActivity : AppCompatActivity(), AlbumListener {
     }
 
     private fun setUpActionBar() {
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        val toolbar: Toolbar = findViewById(R.id.top_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
