@@ -1,6 +1,5 @@
 package com.weemusic.android.ui.topalbums
 
-import android.app.Application
 import androidx.lifecycle.*
 import com.weemusic.android.core.DaggerAppComponent
 import com.weemusic.android.core.DaggerDomainComponent
@@ -12,8 +11,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import javax.inject.Inject
 
-class TopAlbumsViewModel(application: Application, savedStateHandle: SavedStateHandle)
-    : AndroidViewModel(application), LifecycleObserver {
+class TopAlbumsViewModel : ViewModel(), LifecycleObserver {
     @Inject
     lateinit var mGetTopAlbumsUseCase: GetTopAlbumsUseCase
     private var mAlbums: MutableLiveData<List<Album>> = MutableLiveData(emptyList())

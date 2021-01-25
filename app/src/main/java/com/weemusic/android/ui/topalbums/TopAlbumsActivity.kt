@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.weemusic.android.R
@@ -27,9 +26,7 @@ class TopAlbumsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mViewModel = ViewModelProvider(this
-            , SavedStateViewModelFactory(application, this))
-            .get(TopAlbumsViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(TopAlbumsViewModel::class.java)
         lifecycle.addObserver(mViewModel)
 
         setUpActionBar()
