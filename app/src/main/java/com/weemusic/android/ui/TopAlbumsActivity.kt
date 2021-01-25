@@ -1,5 +1,6 @@
 package com.weemusic.android.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -55,8 +56,15 @@ class TopAlbumsActivity : AppCompatActivity() {
         mAdapter = AlbumsAdapter(albums)
         sortAlbums(mSortingMethod)
         rvFeed.adapter = mAdapter
-        rvFeed.layoutManager = GridLayoutManager(this, 2)
+        rvFeed.layoutManager = getProperLayoutManager()
     }
+
+    private fun getProperLayoutManager(): GridLayoutManager =
+        when (resources.configuration.orientation) {
+            Configuration.ORIENTATION_PORTRAIT -> GridLayoutManager(this, 2)
+            Configuration.ORIENTATION_LANDSCAPE -> GridLayoutManager(this, 3)
+            else -> GridLayoutManager(this, 2)
+        }
 
     private fun sortAlbums(sortingMethod: Int) {
         mSortingMethod = sortingMethod
